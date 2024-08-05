@@ -2,12 +2,12 @@ import Fastify from 'fastify';
 import buildHtmlDoc from './buildHtmlDoc';
 import renderApp from './renderApp';
 import * as fs from 'fs';
-// import { startMswServer } from '../mock-server/server';
+import { startMswServer } from '../mock-server/server';
 import { wipeCache } from '../../caching-fetch-library/cachingFetch';
 
 const runServer = async () => {
   // start the msw server
-  // await startMswServer();
+  await startMswServer();
 
   const fastify = Fastify({
     logger: true,
@@ -20,10 +20,10 @@ const runServer = async () => {
   });
 
   // serve the service worker for msw to work in the browser
-  // const mswJs = fs.readFileSync('./dist/mockServiceWorker.js');
-  // fastify.get('/mockServiceWorker.js', async (request, reply) => {
-  //   reply.header('content-type', 'text/javascript').send(mswJs);
-  // });
+  const mswJs = fs.readFileSync('./dist/mockServiceWorker.js');
+  fastify.get('/mockServiceWorker.js', async (request, reply) => {
+    reply.header('content-type', 'text/javascript').send(mswJs);
+  });
 
   // serve a static landing page to provide links to the two versions of the app
   fastify.get('/', async (request, reply) => {

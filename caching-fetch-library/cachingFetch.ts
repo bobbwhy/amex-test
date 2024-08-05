@@ -52,8 +52,6 @@ export const useCachingFetch: UseCachingFetch = (url) => {
   const isMounted = useRef(true);
 
   useEffect( () => {
-    console.log('!!!! ', window.__INITIAL_DATA__)
-
     const cachedItem = cache[url];
     if ( !!cachedItem ) {
       setData(cachedItem.data);

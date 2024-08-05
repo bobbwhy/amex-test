@@ -1,7 +1,7 @@
 import React from 'react';
 import { hydrateRoot } from 'react-dom/client';
 import App from '../../application/App';
-import { startMswClient } from '../mock-server/client';
+// import { startMswClient } from '../mock-server/client';
 import { initializeCache } from '../../caching-fetch-library/cachingFetch';
 
 declare global {
@@ -11,7 +11,7 @@ declare global {
 }
 
 const startClient = async () => {
-  await startMswClient();
+  // await startMswClient();
 
   // If there is initial data, use it to initialize the cache, then clean up
   if (typeof window.__INITIAL_DATA__ === 'string') {
