@@ -144,7 +144,7 @@ const cachedFetch = async (url: string): Promise<CachingFetchResponse> => {
     cachingFetchResponse = {
       data: null,
       isLoading: false,
-      error,
+      error: new Error(`Could not fetch data from ${url}`),
     }
     cache[url] = cachingFetchResponse;
     return cachingFetchResponse;

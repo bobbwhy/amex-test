@@ -23606,7 +23606,7 @@
       cachingFetchResponse = {
         data: null,
         isLoading: false,
-        error: error3
+        error: new Error(`Could not fetch data from ${url}`)
       };
       cache[url] = cachingFetchResponse;
       return cachingFetchResponse;
