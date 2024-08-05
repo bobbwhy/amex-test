@@ -45,9 +45,9 @@ let cache: CachingFetchCache = {
 
 export const useCachingFetch: UseCachingFetch = (url) => {
 
-  const [ data, setData ] = useState(null);
-  const [ isLoading, setIsLoading ] = useState(true);
-  const [ error, setError ] = useState(null);
+  const [ data, setData ] = useState<unknown>(null);
+  const [ isLoading, setIsLoading ] = useState<boolean>(true);
+  const [ error, setError ] = useState<null | Error>(null);
 
   const isMounted = useRef(true);
 
