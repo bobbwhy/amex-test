@@ -39,7 +39,7 @@ type UseCachingFetch = (url: string) => CachingFetchResponse;
  *
  */
 
-const cache: CachingFetchCache = {
+let cache: CachingFetchCache = {
 
 }
 
@@ -52,6 +52,8 @@ export const useCachingFetch: UseCachingFetch = (url) => {
   const isMounted = useRef(true);
 
   useEffect( () => {
+    console.log('!!!! ', window.__INITIAL_DATA__)
+
     const cachedItem = cache[url];
     if ( !!cachedItem ) {
       setData(cachedItem.data);
@@ -149,7 +151,7 @@ const cachedFetch = async (url: string): Promise<CachingFetchResponse> => {
   }
 }
 
-export const preloadCachingFetch = async (url: string): Promise<void> => {
+export const preloadCachingFetch = async (url: string): Promise<CachingFetchResponse> => {
   const cachingFetchResponse: CachingFetchResponse = await cachedFetch(url);
   return cachingFetchResponse;
   // throw new Error(
@@ -173,8 +175,12 @@ export const preloadCachingFetch = async (url: string): Promise<void> => {
  * 4. This file passes a type-check.
  *
  */
-export const serializeCache = (): string => '';
+export const serializeCache = (): string => {
+  return JSON.stringify(cache);
+}
 
-export const initializeCache = (serializedCache: string): void => {};
+export const initializeCache = (serializedCache: string): void => {
+  cache = JSON.parse(serializedCache);
+};
 
 export const wipeCache = (): void => {};

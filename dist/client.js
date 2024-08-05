@@ -23546,6 +23546,7 @@
     const [error3, setError] = (0, import_react.useState)(null);
     const isMounted = (0, import_react.useRef)(true);
     (0, import_react.useEffect)(() => {
+      console.log("!!!! ", window.__INITIAL_DATA__);
       const cachedItem = cache[url];
       if (!!cachedItem) {
         setData(cachedItem.data);
@@ -23616,6 +23617,7 @@
     return cachingFetchResponse;
   };
   var initializeCache = (serializedCache) => {
+    cache = JSON.parse(serializedCache);
   };
 
   // application/Person.tsx

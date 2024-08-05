@@ -50172,6 +50172,7 @@ var useCachingFetch = (url) => {
   const [error3, setError] = (0, import_react.useState)(null);
   const isMounted = (0, import_react.useRef)(true);
   (0, import_react.useEffect)(() => {
+    console.log("!!!! ", window.__INITIAL_DATA__);
     const cachedItem = cache[url];
     if (!!cachedItem) {
       setData(cachedItem.data);
@@ -50241,7 +50242,9 @@ var preloadCachingFetch = async (url) => {
   const cachingFetchResponse = await cachedFetch(url);
   return cachingFetchResponse;
 };
-var serializeCache = () => "";
+var serializeCache = () => {
+  return JSON.stringify(cache);
+};
 var wipeCache = () => {
 };
 
