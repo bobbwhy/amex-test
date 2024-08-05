@@ -1,13 +1,24 @@
+import { useEffect, useState, useRef } from 'react';
+import * as url from "node:url";
+
 // You may edit this file, add new files to support this file,
 // and/or add new dependencies to the project as you see fit.
 // However, you must not change the surface API presented from this file,
 // and you should not need to change any other files in the project to complete the challenge
 
-type UseCachingFetch = (url: string) => {
+
+
+export interface CachingFetchResponse {
   isLoading: boolean;
   data: unknown;
   error: Error | null;
 };
+
+export interface CachingFetchCache {
+  [url: string]: CachingFetchResponse;
+}
+
+type UseCachingFetch = (url: string) => CachingFetchResponse;
 
 /**
  * 1. Implement a caching fetch hook. The hook should return an object with the following properties:
@@ -27,14 +38,69 @@ type UseCachingFetch = (url: string) => {
  * 4. This file passes a type-check.
  *
  */
+
+const cache: CachingFetchCache = {
+
+}
+
 export const useCachingFetch: UseCachingFetch = (url) => {
+
+  const [ data, setData ] = useState(null);
+  const [ isLoading, setIsLoading ] = useState(true);
+  const [ error, setError ] = useState(null);
+
+  const isMounted = useRef(true);
+
+  useEffect( () => {
+    const cachedItem = cache[url];
+    if ( !!cachedItem ) {
+      setData(cachedItem.data);
+      setIsLoading(cachedItem.isLoading);
+      setError(cachedItem.error);
+      return
+    }
+
+
+    const fetchData = async (): Promise<void> => {
+      let result;
+      try {
+        setIsLoading(true);
+        const response = await fetch(url);
+        if ( !response.ok ) {
+          throw new Error(`Could not fetch data from ${url}`);
+        }
+        result = await response.json();
+        setData( result );
+        setIsLoading(false)
+
+      } catch (error) {
+        setError(error);
+      } finally {
+        setIsLoading(false);
+        cache[url] = { data: result, isLoading: false, error: null }
+      }
+    }
+
+    if (!!cache[url]) {
+      return;
+    }
+
+    fetchData();
+
+    return () => {
+      isMounted.current = false;
+    }
+  }, [url])
+
   return {
-    data: null,
-    isLoading: false,
-    error: new Error(
-      'UseCachingFetch has not been implemented, please read the instructions in DevTask.md',
-    ),
-  };
+    data,
+    isLoading,
+    error
+  }
+
+  // we might wanna put in some niceties of a caching system
+  // such as a timeout or busting feature
+  // and also a timestamp
 };
 
 /**

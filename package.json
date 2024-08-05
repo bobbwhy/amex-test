@@ -7,6 +7,11 @@
     "build": "npm run build:server && npm run build:client",
     "build:server": "rm -rf dist && mkdir dist && cp ./framework/mock-server/mockServiceWorker.js dist/ && esbuild ./framework/server/index.js --bundle --minify --platform=node --outfile=dist/server.js",
     "build:client": "esbuild ./framework/client/index.js --bundle --minify --platform=browser --outfile=dist/client.js",
+    "dev": "npm run dev:build && node dist/server.js",
+    "dev:build": "npm run dev:build:server && npm run dev:build:client",
+    "dev:build:server": "rm -rf dist && mkdir dist && cp ./framework/mock-server/mockServiceWorker.js dist/ && esbuild ./framework/server/index.js --bundle --sourcemap=external --platform=node --outfile=dist/server.js",
+    "dev:build:client": "esbuild ./framework/client/index.js --bundle --sourcemap=external --platform=browser --outfile=dist/client.js",
+
     "start": "npm run build && node dist/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
