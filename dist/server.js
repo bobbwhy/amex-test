@@ -50180,26 +50180,16 @@ var useCachingFetch = (url) => {
       return;
     }
     const fetchData = async () => {
-      let result;
-      try {
-        setIsLoading(true);
-        const response = await fetch(url);
-        if (!response.ok) {
-          throw new Error(`Could not fetch data from ${url}`);
-        }
-        result = await response.json();
-        setData(result);
-        setIsLoading(false);
-      } catch (error4) {
-        setError(error4);
-      } finally {
-        setIsLoading(false);
-        cache[url] = { data: result, isLoading: false, error: null };
-      }
+      const cachingFetchResponse = await cachedFetch(url);
+      const {
+        data: data2,
+        isLoading: isLoading2,
+        error: error4
+      } = cachingFetchResponse;
+      setData(data2);
+      setIsLoading(isLoading2);
+      setError(error4);
     };
-    if (!!cache[url]) {
-      return;
-    }
     fetchData();
     return () => {
       isMounted.current = false;
@@ -50216,28 +50206,35 @@ var cachedFetch = async (url) => {
   if (!!cachedItem) {
     return cachedItem;
   }
+  let cachingFetchResponse;
   try {
     const isLoading = true;
     const response = await fetch(url);
     if (!response.ok) {
-      return {
+      cachingFetchResponse = {
         data: null,
         isLoading: false,
         error: new Error(`Could not fetch data from ${url}`)
       };
+      cache[url] = cachingFetchResponse;
+      return cachingFetchResponse;
     }
     const result = await response.json();
-    return {
+    cachingFetchResponse = {
       data: result,
       isLoading: false,
       error: null
     };
+    cache[url] = cachingFetchResponse;
+    return cachingFetchResponse;
   } catch (error3) {
-    return {
+    cachingFetchResponse = {
       data: null,
       isLoading: false,
       error: error3
     };
+    cache[url] = cachingFetchResponse;
+    return cachingFetchResponse;
   }
 };
 var preloadCachingFetch = async (url) => {
