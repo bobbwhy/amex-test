@@ -23585,10 +23585,38 @@
       error: error3
     };
   };
+  var cachedFetch = async (url) => {
+    const cachedItem = cache[url];
+    if (!!cachedItem) {
+      return cachedItem;
+    }
+    try {
+      const isLoading = true;
+      const response = await fetch(url);
+      if (!response.ok) {
+        return {
+          data: null,
+          isLoading: false,
+          error: new Error(`Could not fetch data from ${url}`)
+        };
+      }
+      const result = await response.json();
+      return {
+        data: result,
+        isLoading: false,
+        error: null
+      };
+    } catch (error3) {
+      return {
+        data: null,
+        isLoading: false,
+        error: error3
+      };
+    }
+  };
   var preloadCachingFetch = async (url) => {
-    throw new Error(
-      "preloadCachingFetch has not been implemented, please read the instructions in DevTask.md"
-    );
+    const cachingFetchResponse = await cachedFetch(url);
+    return cachingFetchResponse;
   };
   var initializeCache = (serializedCache) => {
   };

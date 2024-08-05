@@ -117,10 +117,46 @@ export const useCachingFetch: UseCachingFetch = (url) => {
  * 3. This file passes a type-check.
  *
  */
+
+const cachedFetch = async (url: string): Promise<CachingFetchResponse> => {
+  const cachedItem = cache[url];
+  if ( !!cachedItem ) {
+    return cachedItem;
+  }
+
+  try {
+    const isLoading = true;
+    const response: Response = await fetch(url);
+    if ( !response.ok ) {
+      return {
+        data: null,
+        isLoading: false,
+        error: new Error(`Could not fetch data from ${url}`),
+      }
+    }
+
+    const result = await response.json();
+    return {
+      data: result,
+      isLoading: false,
+      error: null,
+    }
+
+  } catch (error) {
+    return {
+      data: null,
+      isLoading: false,
+      error,
+    }
+  }
+}
+
 export const preloadCachingFetch = async (url: string): Promise<void> => {
-  throw new Error(
-    'preloadCachingFetch has not been implemented, please read the instructions in DevTask.md',
-  );
+  const cachingFetchResponse: CachingFetchResponse = await cachedFetch(url);
+  return cachingFetchResponse;
+  // throw new Error(
+  //   'preloadCachingFetch has not been implemented, please read the instructions in DevTask.md',
+  // );
 };
 
 /**
