@@ -12,6 +12,8 @@ I have done this with simple esbuild solutions before, but had issues chaining t
 
 ## Replace the mockServiceWorker
 Since, you know, it says to not use it in production.
+Turns out just shutting this off works fine.
+This will make me a bit crazy later and I will look into a more complete solution if there is one.
 
 ## Others
 
@@ -23,3 +25,6 @@ Since, you know, it says to not use it in production.
 
 ### Setup Error Tracking
 
+### Logging
+
+### Data Sanitation
